@@ -6,6 +6,8 @@
 package model;
 
 import com.sun.org.apache.xerces.internal.util.DOMUtil;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -13,6 +15,8 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -369,4 +373,18 @@ public class InvertedIndex {
         this.dictionary = dictionary;
     }
 
+    public void readDirectory(File dir) {
+        File[] listFile = dir.listFiles();
+        int idDoc = 1;
+        for (int i = 0; i < listFile.length; i++) {
+            Document doc = new Document();
+            try {
+                doc.readFile(idDoc, listFile[i]);
+            } catch (IOException ex) {
+                Logger.getLogger(InvertedIndex.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            addNewDocument(doc);
+            idDoc++;
+        }
+    }
 }
